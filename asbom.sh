@@ -31,28 +31,60 @@ else
 fi
 
 # credentials
+#
+# Check for JPD URL
 echo ""
-echo "Enter you Artifactory URL (eg: hts1.jfrog.io): "
-read JF_URL
-export JF_PLATFORM_URL=https://${JF_URL}
-echo $JF_PLATFORM_URL
-# export JF_PLATFORM_URL="https://soleng.jfrog.io"
-# export JF_PLATFORM_PORT=443
-echo ""
-echo "Enter username: "
-read JF_TOKEN_USER
-export JF_TOKEN_USER
+export JFCHECK=`echo $JF_PLATFORM_URL`
 
-echo ""
-echo "Enter Token: "
-read JF_ACCESS_TOKEN
-export JF_ACCESS_TOKEN
-# export JF_REFERENCE_TOKEN=${JF_ACCESS_TOKEN}
+if [ -n "${JFCHECK}" ]
+then
+  echo "The variable JF_PLATFORM_URL is exported globally with the value: ${JFCHECK}"
+else
+  echo "Enter your Artifactory URL (eg: hts1.jfrog.io): "
+  read -r value
+  export "JF_PLATFORM_URL"="$value"
+  # echo "JF_PLATFORM_URL has been exported globally with the value: ${JF_PLATFORM_URL}"
+fi
 
-echo ""
-echo "Enter repo name: "
-read REPO_NAME
-export REPO_NAME
+export "JF_URL"=`echo $JF_PLATFORM_URL | sed 's|https://||'`
+
+# Check for JPD Username
+export JFCHECK=`echo $JF_TOKEN_USER`
+
+if [ -n "${JFCHECK}" ]
+then
+  echo "The variable JF_TOKEN_USER is exported globally with the value: ${JFCHECK}"
+else
+  echo "Enter Artifactory UserName: "
+  read -r value
+  export "JF_TOKEN_USER"="$value"
+fi
+
+# check for token
+export JFCHECK=`echo $JF_ACCESS_TOKEN`
+
+if [ -n "${JFCHECK}" ]
+then
+  echo "The variable JF_ACCESS_TOKEN is exported globally"
+else
+  echo "Enter Token: "
+  read -r value
+  export "JF_ACCESS_TOKEN"="$value"
+fi
+
+# check repo name
+export JFCHECK=`echo $REPO_NAME`
+
+if [ -n "${JFCHECK}" ]
+then
+  echo "The variable REPO_NAME is exported globally with the value: ${JFCHECK}"
+else
+  echo "Enter Repository Name: "
+  read -r value
+  export "REPO_NAME"="$value"
+fi
+
+
 export ARTIFACT_ORG="webgoat"
 export ARTIFACT_NAME="webgoat"
 export ARTIFACT_TAG="latest"
